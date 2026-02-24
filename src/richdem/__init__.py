@@ -1,7 +1,7 @@
 import copy
 import datetime
 import numpy as np
-import pkg_resources
+from importlib.metadata import version
 
 try:
   import _richdem
@@ -20,7 +20,7 @@ except:
 
 def _RichDEMVersion():
   return "RichDEM (Python {pyver}) (hash={hash}, hashdate={compdate})".format(
-    pyver    = pkg_resources.require("richdem")[0].version,
+    pyver    = version("richdem"),
     hash     = _richdem.rdHash(),
     compdate = _richdem.rdCompileTime()
   )
