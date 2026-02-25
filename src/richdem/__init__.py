@@ -3,6 +3,8 @@ import datetime
 import numpy as np
 from importlib.metadata import version
 
+from richdem._version import __version__
+
 try:
   import _richdem
 except ImportError as e:
@@ -16,6 +18,7 @@ try:
 except:
   GDAL_AVAILABLE = False
 
+richdem_version = _richdem.git_desc.removeprefix("v")
 
 
 def _RichDEMVersion():
