@@ -3,6 +3,7 @@ import re
 import setuptools
 import subprocess
 from setuptools.command.build_ext import build_ext as _build_ext
+from setuptools import setup
 from typing import Optional
 
 from pybind11.setup_helpers import Pybind11Extension
@@ -70,62 +71,7 @@ It can flood or breach depressions, as well as calculate flow accumulation, slop
 
 
 #TODO: https://packaging.python.org/tutorials/distributing-packages/#configuring-your-project
-setuptools.setup(
-  name              = 'richdem',
-  version           = '0.4.0',
-  description       = 'High-Performance Terrain Analysis',
-  long_description  = long_description,
-  url               = 'https://github.com/r-barnes/richdem',
-  author            = 'Richard Barnes',
-  author_email      = 'rbarnes@umn.edu',
-  license           = 'GPLv3',
-  packages          = setuptools.find_packages(),
-  #scripts           = glob.glob('bin/*'),
-  entry_points = {'console_scripts': [
-    'rd_depression_filling=richdem.cli:DepressionFilling',
-    'rd_breach_depressions=richdem.cli:BreachDepressions',
-    'rd_flow_accumulation=richdem.cli:FlowAccumulation',
-    'rd_terrain_attribute=richdem.cli:TerrainAttribute',
-    'rd_info=richdem.cli:RdInfo',
-    'rd_compare=richdem.cli:RdCompare'
-  ]},
-  ext_modules      = ext_modules,
-  cmdclass         = {'build_ext': build_ext_compiler_check},
-  keywords         = 'GIS terrain hydrology geomorphology raster',
-  install_requires = [
-    "numpy>=1.7,<2; python_version > '3.4' or python_version < '3.0'",
-    "numpy>=1.7,<1.12; python_version < '3.4' and python_version > '3.0'"
-  ],
-
-  #TODO: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-  classifiers      = [
-      'Development Status :: 4 - Beta',
-
-      'Environment :: Console',
-
-      'Intended Audience :: Developers',
-      'Intended Audience :: End Users/Desktop',
-      'Intended Audience :: Education',
-      'Intended Audience :: Science/Research',
-      'Intended Audience :: Other Audience',
-
-      'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-
-      'Natural Language :: English',
-
-      'Topic :: Scientific/Engineering :: GIS',
-      'Topic :: Scientific/Engineering :: Information Analysis',
-      'Topic :: Scientific/Engineering :: Visualization',
-      'Topic :: Software Development :: Libraries',
-
-      # Specify the Python versions you support here. In particular, ensure
-      # that you indicate whether you support Python 2, Python 3 or both.
-      'Programming Language :: Python :: 2',
-      'Programming Language :: Python :: 2.6',
-      'Programming Language :: Python :: 2.7',
-      'Programming Language :: Python :: 3',
-      'Programming Language :: Python :: 3.2',
-      'Programming Language :: Python :: 3.3',
-      'Programming Language :: Python :: 3.4',
-  ]
+setup(
+    ext_modules=ext_modules,
+    cmdclass={"build_ext": build_ext_compiler_check},
 )
