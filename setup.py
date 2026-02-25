@@ -1,6 +1,7 @@
 import glob
+import os
 import re
-import setuptools
+import sys
 import subprocess
 from setuptools.command.build_ext import build_ext as _build_ext
 from setuptools import setup
@@ -8,12 +9,14 @@ from typing import Optional
 
 from pybind11.setup_helpers import Pybind11Extension
 
+richdem_prefix = os.environ.get("RICHDEM_PREFIX", sys.prefix)
+openmp_prefix = os.environ.get("OPENMP_PREFIX", sys.prefix)
 
 #Compiler specific arguments
 BUILD_ARGS = {
-  'msvc': ['-std=c++11','-g','-fvisibility=hidden','-O3'],
-  'gcc':  ['-std=c++11','-g','-fvisibility=hidden','-O3','-Wno-unknown-pragmas'],
-  'unix': ['-std=c++11','-g','-fvisibility=hidden','-O3','-Wno-unknown-pragmas']
+  'msvc': ['-std=c++17','-g','-fvisibility=hidden','-O3'],
+  'gcc':  ['-std=c++17','-g','-fvisibility=hidden','-O3'],
+  'unix': ['-std=c++17','-g','-fvisibility=hidden','-O3'],
 }
 
 #Magic that hooks compiler specific arguments up with the compiler
@@ -30,13 +33,22 @@ class build_ext_compiler_check(_build_ext):
 ext_modules = [
     Pybind11Extension(
       "_richdem",
-      sorted(glob.glob('src/*.cpp') + glob.glob('lib/richdem/src/**/*.cpp', recursive=True)),
-      include_dirs  = ['lib/richdem/include/'],
+      ["cpp/pywrapper.cpp"],
+      include_dirs = [
+          os.path.join(richdem_prefix, "include"),
+          os.path.join(openmp_prefix, "include"),
+      ],
+      library_dirs = [
+          os.path.join(richdem_prefix, "lib"),
+          os.path.join(openmp_prefix, "lib"),
+      ],
+      libraries=["omp"],
+      extra_objects=[os.path.join(richdem_prefix, "lib", "librichdem.a")],
       define_macros = [
         ('DOCTEST_CONFIG_DISABLE', None),
         ('RICHDEM_LOGGING',        None),
-        ('_USE_MATH_DEFINES',      None) #To ensure that `#include <cmath>` imports `M_PI` in MSVC
-      ]
+        ('_USE_MATH_DEFINES',      None)
+      ],
     ),
 ]
 
@@ -49,7 +61,6 @@ RichDEM offers a variety of flow metrics, such as D8 and D-infinity.
 It can flood or breach depressions, as well as calculate flow accumulation, slopes, curvatures, &c."""
 
 
-#TODO: https://packaging.python.org/tutorials/distributing-packages/#configuring-your-project
 setup(
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext_compiler_check},
