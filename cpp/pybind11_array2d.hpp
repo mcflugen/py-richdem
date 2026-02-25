@@ -20,7 +20,7 @@ namespace pybind11 { namespace detail {
       PYBIND11_TYPE_CASTER(rd::Array2D<T>, _("rd::Array2D<T>"));
 
       // Conversion part 1 (Python -> C++)
-      bool load(py::handle src, bool convert) 
+      bool load(py::handle src, bool convert)
       {
         if (!convert && !py::array_t<T>::check_(src))
           return false;
@@ -39,7 +39,7 @@ namespace pybind11 { namespace detail {
       }
 
       //Conversion part 2 (C++ -> Python)
-      static py::handle cast(const rd::Array2D<T>& src, py::return_value_policy policy, py::handle parent) 
+      static py::handle cast(const rd::Array2D<T>& src, py::return_value_policy policy, py::handle parent)
       {
 
         std::vector<size_t> shape  (2);

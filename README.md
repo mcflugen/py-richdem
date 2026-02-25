@@ -29,9 +29,9 @@ The design of RichDEM is guided by these principles:
 * **Algorithms will be available as libraries, whenever possible.** RichDEM is
   designed as a set of header-only C++ libraries, making it easy to include in
   your projects and easy to incorporate into other programming languages.
-  RichDEM also includes apps, which are simple wrappers around the algorithms, 
+  RichDEM also includes apps, which are simple wrappers around the algorithms,
   and a limited, but growing, set of algorithms which may have special
-  requirements, like MPI, that make them unsuitable as libraries. These are 
+  requirements, like MPI, that make them unsuitable as libraries. These are
   available as programs.
 
 * **Programs will have a command-line interface, not a GUI.** Command-line
@@ -48,7 +48,7 @@ The design of RichDEM is guided by these principles:
   design algorithms. The code contains extensive internal documentation which is
   DOxygen compatible.
 
-* **Programs and algorithms will provide useful feedback.** Progress bars will 
+* **Programs and algorithms will provide useful feedback.** Progress bars will
   appear if desired and the output will be optimized for machine parsing.
 
 * **Analyses will be reproducible." Every time you run a RichDEM command that
@@ -81,7 +81,7 @@ An example BibTeX entry is:
       title        = {RichDEM: Terrain Analysis Software},
       author       = {Richard Barnes},
       year         = {2016},
-      url          = {http://github.com/r-barnes/richdem}, 
+      url          = {http://github.com/r-barnes/richdem},
     }
 
 This information will be updated as versioned releases become available.
@@ -146,7 +146,7 @@ making it easy to parse with a machine.
  * **d**: Debugging info
 
  * **E**: Indicates an error condition
- 
+
  * **i**: I/O: Amount of data loaded from disk
           carrying on.
 
@@ -155,7 +155,7 @@ making it easy to parse with a machine.
  * **n**: I/O: Amount of data transferred through a network
 
  * **p**: Progress information: inform the user to keep calm because we're
- 
+
  * **r**: Amount of RAM used
 
  * **t**: Timing information: How long stuff took
