@@ -2,20 +2,20 @@
   m.def("rdPFepsilon",           &PriorityFloodEpsilon_Barnes2014<@T@>,       "Fill all depressions with epsilon."); //TODO
 
   m.def("rdBreach",              &Lindsay2016<@T@>,                  "TODO");
-  m.def("rdBreach",              [](Array2D<@T@> &dem, const int mode, bool fill_depressions, 
+  m.def("rdBreach",              [](Array2D<@T@> &dem, const int mode, bool fill_depressions,
 
     &Lindsay2016<@T@>,                  "TODO");
 
-  m.def("TA_SPI",                &TA_SPI<@T@, float, double>,        "TODO");         
-  m.def("TA_CTI",                &TA_CTI<@T@, float, double>,        "TODO");         
-  m.def("TA_slope_riserun",      &TA_slope_riserun<@T@>,             "TODO");                   
-  m.def("TA_slope_percentage",   &TA_slope_percentage<@T@>,          "TODO");                      
-  m.def("TA_slope_degrees",      &TA_slope_degrees<@T@>,             "TODO");                   
-  m.def("TA_slope_radians",      &TA_slope_radians<@T@>,             "TODO");                   
-  m.def("TA_aspect",             &TA_aspect<@T@>,                    "TODO");            
-  m.def("TA_curvature",          &TA_curvature<@T@>,                 "TODO");               
-  m.def("TA_planform_curvature", &TA_planform_curvature<@T@>,        "TODO");                        
-  m.def("TA_profile_curvature",  &TA_profile_curvature<@T@>,         "TODO");                       
+  m.def("TA_SPI",                &TA_SPI<@T@, float, double>,        "TODO");
+  m.def("TA_CTI",                &TA_CTI<@T@, float, double>,        "TODO");
+  m.def("TA_slope_riserun",      &TA_slope_riserun<@T@>,             "TODO");
+  m.def("TA_slope_percentage",   &TA_slope_percentage<@T@>,          "TODO");
+  m.def("TA_slope_degrees",      &TA_slope_degrees<@T@>,             "TODO");
+  m.def("TA_slope_radians",      &TA_slope_radians<@T@>,             "TODO");
+  m.def("TA_aspect",             &TA_aspect<@T@>,                    "TODO");
+  m.def("TA_curvature",          &TA_curvature<@T@>,                 "TODO");
+  m.def("TA_planform_curvature", &TA_planform_curvature<@T@>,        "TODO");
+  m.def("TA_profile_curvature",  &TA_profile_curvature<@T@>,         "TODO");
 
   m.def("FA_Tarboton",           &FA_Tarboton<@T@,double>,          "TODO");
   m.def("FA_Holmgren",           &FA_Holmgren<@T@,double>,          "TODO");
@@ -109,4 +109,4 @@
         [](Array2D<@T@> &a, const int i) -> @T@& {
           return a(i);
         }
-      );      
+      );
