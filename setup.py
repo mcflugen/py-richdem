@@ -8,8 +8,6 @@ from typing import Optional
 
 from pybind11.setup_helpers import Pybind11Extension
 
-richdem_compile_time: Optional[str] = None
-richdem_git_hash: Optional[str]     = None
 
 #Compiler specific arguments
 BUILD_ARGS = {
@@ -29,23 +27,6 @@ class build_ext_compiler_check(_build_ext):
         print(f'COMPILER ARGUMENTS: {ext.extra_compile_args}')
     _build_ext.build_extensions(self)
 
-if richdem_git_hash is None:
-  try:
-    shash = subprocess.Popen(["git log --pretty=format:'%h' -n 1"], shell=True, stderr=subprocess.STDOUT, stdout=subprocess.PIPE).stdout.readlines()[0].decode('utf8').strip()
-    sdate = subprocess.Popen(["git log -1 --pretty='%ci'"], shell=True, stderr=subprocess.STDOUT, stdout=subprocess.PIPE).stdout.readlines()[0].decode('utf8').strip()
-    if re.match(r'^[0-9a-z]+$', shash) and re.match(r'^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}.*$', sdate):
-      richdem_compile_time = sdate
-      richdem_git_hash     = shash
-  except:
-    print("Warning! Could not find RichDEM version. Software will still work, but reproducibility will be compromised.")
-    pass
-
-if richdem_git_hash is None:
-  richdem_compile_time = 'Unknown'
-  richdem_git_hash     = 'Unknown'
-
-print("Using RichDEM hash={0}, time={1}".format(richdem_git_hash, richdem_compile_time))
-
 ext_modules = [
     Pybind11Extension(
       "_richdem",
@@ -53,8 +34,6 @@ ext_modules = [
       include_dirs  = ['lib/richdem/include/'],
       define_macros = [
         ('DOCTEST_CONFIG_DISABLE', None),
-        ('RICHDEM_COMPILE_TIME',   f'"\\"{richdem_compile_time}\\""'),
-        ('RICHDEM_GIT_HASH',       f'"\\"{richdem_git_hash}\\""'    ),
         ('RICHDEM_LOGGING',        None),
         ('_USE_MATH_DEFINES',      None) #To ensure that `#include <cmath>` imports `M_PI` in MSVC
       ]

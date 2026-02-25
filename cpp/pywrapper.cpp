@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <richdem/common/richdem_version.hpp>
 #include <richdem/depressions/depressions.hpp>
 #include <richdem/methods/terrain_attributes.hpp>
 #include <richdem/methods/flow_accumulation.hpp>
@@ -172,6 +173,12 @@ void TemplatedWrapper(py::module &m, std::string tname){
 
 PYBIND11_MODULE(_richdem, m) {
   m.doc() = "Internal library used by pyRichDEM for calculations";
+
+  m.attr("__version__") = RICHDEM_GIT_TAG;
+  m.attr("git_tag") = RICHDEM_GIT_TAG;
+  m.attr("git_hash") = RICHDEM_GIT_HASH;
+  m.attr("git_desc") = RICHDEM_GIT_DESC;
+  m.attr("compilation_datetime") = RICHDEM_COMPILE_TIME;
 
   //py::bind_vector<std::vector<double>>(m, "VecDouble");
   py::bind_map<std::map<std::string, std::string>>(m, "MapStringString");
