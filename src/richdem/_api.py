@@ -1,6 +1,5 @@
 import copy
 import datetime
-from importlib.metadata import version
 
 import numpy as np
 
@@ -23,21 +22,20 @@ except ModuleNotFoundError:
 richdem_version = _richdem.git_desc.removeprefix("v")
 
 
-def _RichDEMVersion():
-    return "RichDEM (Python {pyver}) (hash={hash}, hashdate={compdate})".format(
-        pyver=version("richdem"),
-        hash=_richdem.rdHash(),
-        compdate=_richdem.rdCompileTime(),
+def _format_richdem_version():
+    return (
+        f"RichDEM (Python {__version__})"
+        f" (hash={_richdem.git_hash}, hashdate={_richdem.compilation_datetime})"
     )
 
 
-def _AddAnalysis(rda, analysis):
+def _add_analysis(rda, analysis):
     if type(rda) not in [rdarray, rd3array]:
         raise Exception("An rdarray or rd3array is required!")
 
     metastr = "\n{nowdate} | {verstr} | {analysis}".format(
         nowdate=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f UTC"),
-        verstr=_RichDEMVersion(),
+        verstr=_format_richdem_version(),
         analysis=analysis,
     )
 
@@ -48,7 +46,7 @@ def _AddAnalysis(rda, analysis):
     rda.metadata["PROCESSING_HISTORY"] += metastr
 
 
-def rdShow(
+def rd_show(
     rda,
     ignore_colours=(),
     show=True,
@@ -76,7 +74,7 @@ def rdShow(
     try:
         import matplotlib.pyplot as plt
     except ModuleNotFoundError:
-        raise Exception("matplotlib must be installed to use rdShow!")
+        raise Exception("matplotlib must be installed to use rd_show!")
 
     zoom_vars = [zxmin, zxmax, zymin, zymax]
     some_zoom = any(x is not None for x in zoom_vars)
@@ -279,7 +277,7 @@ class rd3array(np.ndarray):
         # )
 
 
-def LoadGDAL(filename, no_data=None):
+def load_gdal(filename, no_data=None):
     """Read a GDAL file.
 
     Opens any file GDAL can read, selects the first raster band, and loads it
@@ -296,7 +294,7 @@ def LoadGDAL(filename, no_data=None):
         A RichDEM array
     """
     if not GDAL_AVAILABLE:
-        raise Exception("richdem.LoadGDAL() requires GDAL.")
+        raise Exception("richdem.load_gdal() requires GDAL.")
 
     allowed_types = {
         gdal.GDT_Byte,
@@ -339,12 +337,12 @@ def LoadGDAL(filename, no_data=None):
     for k, v in src_ds.GetMetadata().items():
         srcdata.metadata[k] = v
 
-    _AddAnalysis(srcdata, f"LoadGDAL(filename={filename}, no_data={no_data})")
+    _add_analysis(srcdata, f"load_gdal(filename={filename}, no_data={no_data})")
 
     return srcdata
 
 
-def SaveGDAL(filename, rda):
+def save_gdal(filename, rda):
     """Save a GDAL file.
 
     Saves a RichDEM array to a data file in GeoTIFF format.
@@ -363,7 +361,7 @@ def SaveGDAL(filename, rda):
         raise Exception("A richdem.rdarray or numpy.ndarray is required!")
 
     if not GDAL_AVAILABLE:
-        raise Exception("richdem.SaveGDAL() requires GDAL.")
+        raise Exception("richdem.save_gdal() requires GDAL.")
 
     driver = gdal.GetDriverByName("GTiff")
     data_type = gdal.GDT_Float32  # TODO
@@ -379,7 +377,7 @@ def SaveGDAL(filename, rda):
         data_set.SetMetadataItem(str(k), str(v))
 
 
-def FillDepressions(dem, epsilon=False, in_place=False, topology="D8"):
+def fill_depressions(dem, epsilon=False, in_place=False, topology="D8"):
     """Fills all depressions in a DEM.
 
     Args:
@@ -402,7 +400,7 @@ def FillDepressions(dem, epsilon=False, in_place=False, topology="D8"):
     if not in_place:
         dem = dem.copy()
 
-    _AddAnalysis(dem, f"FillDepressions(dem, epsilon={epsilon})")
+    _add_analysis(dem, f"fill_depressions(dem, epsilon={epsilon})")
 
     demw = dem.wrap()
 
@@ -423,7 +421,7 @@ def FillDepressions(dem, epsilon=False, in_place=False, topology="D8"):
         return dem
 
 
-def BreachDepressions(dem, in_place=False, topology="D8"):
+def breach_depressions(dem, in_place=False, topology="D8"):
     """Breaches all depressions in a DEM.
 
     Args:
@@ -444,7 +442,7 @@ def BreachDepressions(dem, in_place=False, topology="D8"):
     if not in_place:
         dem = dem.copy()
 
-    _AddAnalysis(dem, "BreachDepressions(dem)")
+    _add_analysis(dem, "breach_depressions(dem)")
 
     demw = dem.wrap()
 
@@ -459,7 +457,7 @@ def BreachDepressions(dem, in_place=False, topology="D8"):
         return dem
 
 
-def ResolveFlats(dem, in_place=False):
+def resolve_flats(dem, in_place=False):
     """Attempts to resolve flats by imposing a local gradient
 
     Args:
@@ -476,7 +474,7 @@ def ResolveFlats(dem, in_place=False):
     if not in_place:
         dem = dem.copy()
 
-    _AddAnalysis(dem, f"ResolveFlats(dem, in_place={in_place})")
+    _add_analysis(dem, f"resolve_flats(dem, in_place={in_place})")
 
     demw = dem.wrap()
 
@@ -488,7 +486,7 @@ def ResolveFlats(dem, in_place=False):
         return dem
 
 
-def FlowAccumulation(dem, method=None, exponent=None, weights=None, in_place=False):
+def flow_accumulation(dem, method=None, exponent=None, weights=None, in_place=False):
     """Calculates flow accumulation. A variety of methods are available.
 
     Args:
@@ -606,10 +604,10 @@ def FlowAccumulation(dem, method=None, exponent=None, weights=None, in_place=Fal
 
     accumw = accum.wrap()
 
-    _AddAnalysis(
+    _add_analysis(
         accum,
-        "FlowAccumulation(dem, method={method}, exponent={exponent}, weights={weights},"
-        " in_place={in_place})".format(
+        "flow_accumulation(dem, method={method}, exponent={exponent}"
+        ", weights={weights}, in_place={in_place})".format(
             method=method,
             exponent=exponent,
             weights="None" if weights is None else "weights",
@@ -622,12 +620,12 @@ def FlowAccumulation(dem, method=None, exponent=None, weights=None, in_place=Fal
     elif method in facc_methods_exponent:
         if exponent is None:
             raise Exception(
-                'FlowAccumulation method "' + method + '" requires an exponent!'
+                'flow_accumulation method "' + method + '" requires an exponent!'
             )
         facc_methods_exponent[method](dem.wrap(), accumw, exponent)
     else:
         raise Exception(
-            "Invalid FlowAccumulation method. Valid methods are: "
+            "Invalid flow_accumulation method. Valid methods are: "
             + ", ".join(list(facc_methods.keys()) + list(facc_methods_exponent.keys()))
         )
 
@@ -636,7 +634,7 @@ def FlowAccumulation(dem, method=None, exponent=None, weights=None, in_place=Fal
     return accum
 
 
-def FlowAccumFromProps(props, weights=None, in_place=False):
+def flow_accum_from_props(props, weights=None, in_place=False):
     """Calculates flow accumulation from flow proportions.
 
     Args:
@@ -673,9 +671,9 @@ def FlowAccumFromProps(props, weights=None, in_place=False):
 
     accumw = accum.wrap()
 
-    _AddAnalysis(
+    _add_analysis(
         accum,
-        "FlowAccumFromProps(dem, weights={weights}, in_place={in_place})".format(
+        "flow_accum_from_props(dem, weights={weights}, in_place={in_place})".format(
             weights="None" if weights is None else "weights", in_place=in_place
         ),
     )
@@ -687,7 +685,7 @@ def FlowAccumFromProps(props, weights=None, in_place=False):
     return accum
 
 
-def FlowProportions(dem, method=None, exponent=None):
+def flow_proportions(dem, method=None, exponent=None):
     """Calculates flow proportions. A variety of methods are available.
 
     Args:
@@ -784,9 +782,9 @@ def FlowProportions(dem, method=None, exponent=None):
     )
     fpropsw = fprops.wrap()
 
-    _AddAnalysis(
+    _add_analysis(
         fprops,
-        "FlowProportions(dem, method={method}, exponent={exponent})".format(
+        "flow_proportions(dem, method={method}, exponent={exponent})".format(
             method=method,
             exponent=exponent,
         ),
@@ -797,12 +795,12 @@ def FlowProportions(dem, method=None, exponent=None):
     elif method in fprop_methods_exponent:
         if exponent is None:
             raise Exception(
-                'FlowProportions method "' + method + '" requires an exponent!'
+                'flow_proportions method "' + method + '" requires an exponent!'
             )
         fprop_methods_exponent[method](dem.wrap(), fpropsw, exponent)
     else:
         raise Exception(
-            "Invalid FlowProportions method. Valid methods are: "
+            "Invalid flow_proportions method. Valid methods are: "
             + ", ".join(
                 list(fprop_methods.keys()) + list(fprop_methods_exponent.keys())
             )
@@ -813,7 +811,7 @@ def FlowProportions(dem, method=None, exponent=None):
     return fprops
 
 
-def TerrainAttribute(dem, attrib, zscale=1.0):
+def terrain_attribute(dem, attrib, zscale=1.0):
     """Calculates terrain attributes. A variety of methods are available.
 
     Args:
@@ -866,7 +864,7 @@ def TerrainAttribute(dem, attrib, zscale=1.0):
 
     if attrib not in terrain_attribs:
         raise Exception(
-            "Invalid TerrainAttributes attribute. Valid attributes are: "
+            "Invalid terrain_attributes attribute. Valid attributes are: "
             + ", ".join(terrain_attribs.keys())
         )
 
@@ -875,13 +873,10 @@ def TerrainAttribute(dem, attrib, zscale=1.0):
     )
     resultw = result.wrap()
 
-    _AddAnalysis(result, f"TerrainAttribute(dem, attrib={attrib}, zscale={zscale})")
+    _add_analysis(result, f"terrain_attribute(dem, attrib={attrib}, zscale={zscale})")
 
     terrain_attribs[attrib](dem.wrap(), resultw, zscale)
 
     result.copyFromWrapped(resultw)
 
     return result
-
-
-__all__ = ("__version__", "richdem_version")
