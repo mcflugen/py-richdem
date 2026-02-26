@@ -12,7 +12,7 @@ build-backend = "setuptools.build_meta"
 name = "richdem"
 description = "Python interface to the RichDEM terrain analysis library."
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 license = "GPL-3.0-only"
 license-files = ["LICENSE.txt"]
 authors = [
@@ -32,9 +32,6 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Information Analysis",
   "Topic :: Scientific/Engineering :: Visualization",
   "Topic :: Software Development :: Libraries",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -54,7 +51,7 @@ attr = "richdem._version.__version__"
 where = ["src"]
 
 [tool.cibuildwheel]
-build = ["cp314-*"]
+build = ["cp311-*", "cp312-*", "cp313-*", "cp314-*"]
 skip = ["*-win*", "*-manylinux_i686*", "*-musllinux_i686*"]
 environment-pass = ["OPENMP_PREFIX"]
 environment = """
