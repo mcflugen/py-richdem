@@ -47,6 +47,14 @@ dynamic = [
 [project.optional-dependencies]
 gdal = ["gdal"]
 
+[project.scripts]
+rd_depression_filling = "richdem.cli:depression_filling"
+rd_breach_depressions = "richdem.cli:breach_depressions"
+rd_flow_accumulation = "richdem.cli:flow_accumulation"
+rd_terrain_attribute = "richdem.cli:terrain_attribute"
+rd_info = "richdem.cli:rd_info"
+rd_compare = "richdem.cli:rd_compare"
+
 [tool.setuptools.dynamic.version]
 attr = "richdem._version.__version__"
 
