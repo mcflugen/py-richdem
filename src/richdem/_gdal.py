@@ -96,8 +96,8 @@ def save_gdal(filename, rda):
     """
     gdal = _require_gdal()
 
-    if type(rda) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(rda, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     driver = gdal.GetDriverByName("GTiff")
     data_type = gdal.GDT_Float32  # TODO
