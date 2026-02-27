@@ -7,6 +7,8 @@ from argparse import RawTextHelpFormatter
 import numpy as np
 
 import richdem as rd
+from richdem._gdal import load_gdal
+from richdem._gdal import save_gdal
 
 
 def DepressionFilling():
@@ -30,10 +32,10 @@ def DepressionFilling():
     )
     args = parser.parse_args()
 
-    dem = rd.LoadGDAL(args.dem)
+    dem = load_gdal(args.dem)
     rd._AddAnalysis(dem, " ".join(sys.argv))
     rd.FillDepressions(dem, epsilon=args.gradient, in_place=True)
-    rd.SaveGDAL(args.outname, dem)
+    save_gdal(args.outname, dem)
 
 
 def BreachDepressions():
@@ -49,10 +51,10 @@ def BreachDepressions():
     )
     args = parser.parse_args()
 
-    dem = rd.LoadGDAL(args.dem)
+    dem = load_gdal(args.dem)
     rd._AddAnalysis(dem, " ".join(sys.argv))
     rd.BreachDepressions(dem)
-    rd.SaveGDAL(args.outname, dem)
+    save_gdal(args.outname, dem)
 
 
 def FlowAccumulation():
@@ -93,10 +95,10 @@ Methods marked (E) require the exponent argument.
     )
     args = parser.parse_args()
 
-    dem = rd.LoadGDAL(args.dem)
+    dem = load_gdal(args.dem)
     rd._AddAnalysis(dem, " ".join(sys.argv))
     accum = rd.FlowAccumulation(dem, method=args.method, exponent=args.exponent)
-    rd.SaveGDAL(args.outname, accum)
+    save_gdal(args.outname, accum)
 
 
 def TerrainAttribute():
@@ -139,10 +141,10 @@ profile_curvature
     )
     args = parser.parse_args()
 
-    dem = rd.LoadGDAL(args.dem)
+    dem = load_gdal(args.dem)
     rd._AddAnalysis(dem, " ".join(sys.argv))
     tattrib = rd.TerrainAttribute(dem, attrib=args.attrib, zscale=args.zscale)
-    rd.SaveGDAL(args.outname, tattrib)
+    save_gdal(args.outname, tattrib)
 
 
 def RdInfo():
@@ -167,7 +169,7 @@ rda      -- A dataset
     )
     args = parser.parse_args()
 
-    rda = rd.LoadGDAL(args.rda)
+    rda = load_gdal(args.rda)
 
     print(f"File      = {args.rda}    ")
     print(f"Data type = {rda.dtype}    ")
@@ -209,8 +211,8 @@ rda      -- A dataset
     parser.add_argument("rda2", type=str, help="Elevation model")
     args = parser.parse_args()
 
-    ds1 = rd.LoadGDAL(args.rda1)
-    ds2 = rd.LoadGDAL(args.rda2)
+    ds1 = load_gdal(args.rda1)
+    ds2 = load_gdal(args.rda2)
 
     if ds1.no_data != ds2.no_data:
         print("NoData differs")

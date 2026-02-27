@@ -5,14 +5,14 @@ from richdem._api import fill_depressions
 from richdem._api import flow_accum_from_props
 from richdem._api import flow_accumulation
 from richdem._api import flow_proportions
-from richdem._api import load_gdal
 from richdem._api import rd3array
 from richdem._api import rd_show
 from richdem._api import rdarray
 from richdem._api import resolve_flats
 from richdem._api import richdem_version
-from richdem._api import save_gdal
 from richdem._api import terrain_attribute
+from richdem._gdal import load_gdal
+from richdem._gdal import save_gdal
 from richdem._legacy import BreachDepressions  # noqa: F401
 from richdem._legacy import FillDepressions  # noqa: F401
 from richdem._legacy import FlowAccumFromProps  # noqa: F401
