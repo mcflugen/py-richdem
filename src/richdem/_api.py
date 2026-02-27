@@ -6,7 +6,7 @@ import numpy as np
 from richdem._version import __version__
 
 try:
-    import _richdem
+    from . import _richdem  # type: ignore[attr-defined]
 except ImportError as e:
     print("COULD NOT LOAD RichDEM ENGINE! NOTHING WILL WORK!")
     raise e

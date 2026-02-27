@@ -55,7 +55,7 @@ if is_windows:
 
 ext_modules = [
     Pybind11Extension(
-        "_richdem",
+        "richdem._richdem",
         sources,
         include_dirs=include_dirs,
         library_dirs=library_dirs,

@@ -44,6 +44,10 @@ dynamic = [
   "version",
 ]
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = ["_richdem"]
+
 [project.optional-dependencies]
 gdal = ["gdal"]
 
@@ -60,6 +64,7 @@ attr = "richdem._version.__version__"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["richdem*"]
 
 [tool.cibuildwheel]
 build = ["cp311-*", "cp312-*", "cp313-*", "cp314-*"]
