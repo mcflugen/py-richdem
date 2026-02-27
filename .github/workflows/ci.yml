@@ -35,6 +35,11 @@ jobs:
           - { os: macos-latest, cibw-only: cp313-macosx_arm64 }
           - { os: macos-latest, cibw-only: cp314-macosx_arm64 }
 
+          - { os: windows-latest, cibw-only: cp311-win_amd64 }
+          - { os: windows-latest, cibw-only: cp312-win_amd64 }
+          - { os: windows-latest, cibw-only: cp313-win_amd64 }
+          - { os: windows-latest, cibw-only: cp314-win_amd64 }
+
     steps:
       - uses: actions/checkout@v6
         with:
@@ -60,9 +65,6 @@ jobs:
         shell: bash -l {0}
         run: |
           echo "OPENMP_PREFIX=${CONDA_PREFIX}" >> "$GITHUB_ENV"
-
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2.1
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3
