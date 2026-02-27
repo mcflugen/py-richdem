@@ -44,6 +44,9 @@ dynamic = [
   "version",
 ]
 
+[project.optional-dependencies]
+gdal = ["gdal"]
+
 [tool.setuptools.dynamic.version]
 attr = "richdem._version.__version__"
 
