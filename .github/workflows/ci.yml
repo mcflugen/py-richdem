@@ -1,6 +1,20 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      publish_to:
+        description: "Where to publish (leave blank to just build/test)"
+        type: choice
+        required: false
+        default: ""
+        options:
+          - ""
+          - testpypi
+          - pypi
 
 jobs:
   build-wheels:
@@ -76,3 +90,37 @@ jobs:
         with:
           name: wheel-${{ matrix.os }}-${{ matrix.cibw-only }}
           path: ./wheelhouse/*.whl
+
+  publish:
+    needs: "build-wheels"
+    name: "Publish to PyPI/TestPyPI"
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_to != ''
+
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: "wheel-*"
+          merge-multiple: true
+          path: ${{ github.workspace }}/dist
+
+      - name: Publish to testpypi
+        if: steps.exists.outputs.exists != 'true' && inputs.publish_to == 'testpypi'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy
+          skip-existing: true
+          print-hash: true
+          verify-metadata: false
+
+      - name: Publish to pypi
+        if: steps.exists.outputs.exists != 'true' && inputs.publish_to == 'pypi'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+          print-hash: true
+          verify-metadata: false
