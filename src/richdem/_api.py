@@ -22,8 +22,8 @@ def _format_richdem_version():
 
 
 def _add_analysis(rda, analysis):
-    if type(rda) not in [rdarray, rd3array]:
-        raise Exception("An rdarray or rd3array is required!")
+    if not isinstance(rda, (rdarray, rd3array)):
+        raise TypeError("An rdarray or rd3array is required!")
 
     metastr = "\n{nowdate} | {verstr} | {analysis}".format(
         nowdate=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f UTC"),
@@ -58,10 +58,10 @@ def rd_show(
     zcolor="red",
     zloc=1,
 ):
-    if type(rda) is np.ndarray:
+    if isinstance(rda, np.ndarray):
         rda = rdarray(rda)
-    elif type(rda) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    elif not isinstance(rda, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     try:
         import matplotlib.pyplot as plt
@@ -283,11 +283,11 @@ def fill_depressions(dem, epsilon=False, in_place=False, topology="D8"):
     Returns:
         DEM without depressions.
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
-    if topology not in ["D8", "D4"]:
-        raise Exception("Unknown topology!")
+    if topology not in ("D8", "D4"):
+        raise ValueError("Unknown topology!")
 
     if not in_place:
         dem = dem.copy()
@@ -325,11 +325,11 @@ def breach_depressions(dem, in_place=False, topology="D8"):
     Returns:
         DEM without depressions.
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
-    if topology not in ["D8", "D4"]:
-        raise Exception("Unknown topology!")
+    if topology not in ("D8", "D4"):
+        raise TypeError("Unknown topology!")
 
     if not in_place:
         dem = dem.copy()
@@ -360,8 +360,8 @@ def resolve_flats(dem, in_place=False):
     Returns:
         DEM modified such that all flats drain.
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     if not in_place:
         dem = dem.copy()
@@ -458,8 +458,8 @@ def flow_accumulation(dem, method=None, exponent=None, weights=None, in_place=Fa
        Computer Vision, Graphics, and Image Processing, 28(3), 323–344.
        https://doi.org/10.1016/S0734-189X(84)80011-0
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     facc_methods = {
         "Tarboton": _richdem.FA_Tarboton,
@@ -544,8 +544,8 @@ def flow_accum_from_props(props, weights=None, in_place=False):
         A flow accumulation array. If `weights` was provided and `in_place` was
         True, then this matrix is a view of the modified data.
     """
-    if type(props) is not rd3array:
-        raise Exception("A richdem.rd3array or numpy.ndarray is required!")
+    if not isinstance(props, rd3array):
+        raise TypeError("A richdem.rd3array or numpy.ndarray is required!")
 
     if weights is not None and in_place:
         accum = rdarray(weights, no_data=-1)
@@ -647,8 +647,8 @@ def flow_proportions(dem, method=None, exponent=None):
        Computer Vision, Graphics, and Image Processing, 28(3), 323–344.
        https://doi.org/10.1016/S0734-189X(84)80011-0
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     fprop_methods = {
         "Tarboton": _richdem.FM_Tarboton,
@@ -738,8 +738,8 @@ def terrain_attribute(dem, attrib, zscale=1.0):
        of land surface topography. Earth Surface Processes and Landforms,
        12(1), 47–56. https://doi.org/10.1002/esp.3290120107
     """
-    if type(dem) is not rdarray:
-        raise Exception("A richdem.rdarray or numpy.ndarray is required!")
+    if not isinstance(dem, rdarray):
+        raise TypeError("A richdem.rdarray or numpy.ndarray is required!")
 
     terrain_attribs = {
         # "spi":                _richdem.TA_SPI,
