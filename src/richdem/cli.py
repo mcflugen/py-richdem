@@ -6,12 +6,18 @@ from argparse import RawTextHelpFormatter
 
 import numpy as np
 
-import richdem as rd
+from richdem._api import _add_analysis
+from richdem._api import _format_richdem_version
+from richdem._api import breach_depressions as breach_depressions_
+from richdem._api import fill_depressions
+from richdem._api import flow_accumulation as flow_accumulation_
+from richdem._api import rd_show
+from richdem._api import terrain_attribute as terrain_attribute_
 from richdem._gdal import load_gdal
 from richdem._gdal import save_gdal
 
 
-def DepressionFilling():
+def depression_filling():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter, description="RichDEM Depression Filling"
     )
@@ -28,17 +34,17 @@ def DepressionFilling():
         ),
     )
     parser.add_argument(
-        "-v", "--version", action="version", version=rd._RichDEMVersion()
+        "-v", "--version", action="version", version=_format_richdem_version()
     )
     args = parser.parse_args()
 
     dem = load_gdal(args.dem)
-    rd._AddAnalysis(dem, " ".join(sys.argv))
-    rd.FillDepressions(dem, epsilon=args.gradient, in_place=True)
+    _add_analysis(dem, " ".join(sys.argv))
+    fill_depressions(dem, epsilon=args.gradient, in_place=True)
     save_gdal(args.outname, dem)
 
 
-def BreachDepressions():
+def breach_depressions():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter,
         description="""RichDEM Depression Breaching""",
@@ -47,17 +53,17 @@ def BreachDepressions():
     parser.add_argument("dem", type=str, help="Elevation model")
     parser.add_argument("outname", type=str, help="Name of output file")
     parser.add_argument(
-        "-v", "--version", action="version", version=rd._RichDEMVersion()
+        "-v", "--version", action="version", version=_format_richdem_version()
     )
     args = parser.parse_args()
 
     dem = load_gdal(args.dem)
-    rd._AddAnalysis(dem, " ".join(sys.argv))
-    rd.BreachDepressions(dem)
+    _add_analysis(dem, " ".join(sys.argv))
+    breach_depressions_(dem)
     save_gdal(args.outname, dem)
 
 
-def FlowAccumulation():
+def flow_accumulation():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter,
         description="""RichDEM Flow Accumulation
@@ -91,17 +97,17 @@ Methods marked (E) require the exponent argument.
         "-e", "--exponent", type=float, help="Some methods require an exponent"
     )
     parser.add_argument(
-        "-v", "--version", action="version", version=rd._RichDEMVersion()
+        "-v", "--version", action="version", version=_format_richdem_version()
     )
     args = parser.parse_args()
 
     dem = load_gdal(args.dem)
-    rd._AddAnalysis(dem, " ".join(sys.argv))
-    accum = rd.FlowAccumulation(dem, method=args.method, exponent=args.exponent)
+    _add_analysis(dem, " ".join(sys.argv))
+    accum = flow_accumulation_(dem, method=args.method, exponent=args.exponent)
     save_gdal(args.outname, accum)
 
 
-def TerrainAttribute():
+def terrain_attribute():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter,
         description="""RichDEM Terrain Attribute
@@ -137,17 +143,17 @@ profile_curvature
         help="Scale elevations by this factor prior to calculation",
     )
     parser.add_argument(
-        "-v", "--version", action="version", version=rd._RichDEMVersion()
+        "-v", "--version", action="version", version=_format_richdem_version()
     )
     args = parser.parse_args()
 
     dem = load_gdal(args.dem)
-    rd._AddAnalysis(dem, " ".join(sys.argv))
-    tattrib = rd.TerrainAttribute(dem, attrib=args.attrib, zscale=args.zscale)
+    _add_analysis(dem, " ".join(sys.argv))
+    tattrib = terrain_attribute_(dem, attrib=args.attrib, zscale=args.zscale)
     save_gdal(args.outname, tattrib)
 
 
-def RdInfo():
+def rd_info():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter,
         description="""RichDEM Dataset Information
@@ -194,10 +200,10 @@ rda      -- A dataset
     print("-------------------")
 
     if args.show:
-        rd.rdShow(rda, cmap=args.cmap, vmin=args.vmin, vmax=args.vmax)
+        rd_show(rda, cmap=args.cmap, vmin=args.vmin, vmax=args.vmax)
 
 
-def RdCompare():
+def rd_compare():
     parser = argparse.ArgumentParser(
         formatter_class=RawTextHelpFormatter,
         description="""\
