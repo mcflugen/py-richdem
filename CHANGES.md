@@ -1,6 +1,6 @@
 # Changelog for py-richdem
 
-## 2.2.0 (unreleased)
+## 2.2.0
 
 ### Features
 
