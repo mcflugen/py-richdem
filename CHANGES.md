@@ -1,45 +1,95 @@
-# Changelog for py-richdem
+# Release Notes
 
-## 2.2.0
+## 2.2.0 (unreleased)
 
-### Features
+### Added
 
-* Added a step to the CI to build wheels, using *cibuildwheel*,
-  that bundle the *richdem* library. Wheels are built for
-  *Linux*, *Mac*, and *Windows* and for Python 3.11+.
+* Continuous integration step to build wheels using *cibuildwheel* that
+  bundle the *richdem* library. Wheels are built for *Linux*, *Mac*, and
+  *Windows* for Python 3.11+.
+
   * [#6](https://github.com/mcflugen/py-richdem/issues/6),
     [#9](https://github.com/mcflugen/py-richdem/issues/9),
     [#11](https://github.com/mcflugen/py-richdem/issues/11),
     [#15](https://github.com/mcflugen/py-richdem/issues/15)
-* Added a publish job to the CI that will publish built
-  either to PyPI or TestPyPI.
+
+* CI publish job for releasing built wheels to *PyPI* or *TestPyPI*.
+
   * [#21](https://github.com/mcflugen/py-richdem/issues/21)
 
-### Updating
+* Added build configuration metadata (compiler, platform, and feature flags)
+  to the bundled *richdem* library and exposed it as
+  `richdem.richdem_build_string`.
 
-* Moved the *py-richdem* package to a src-layout.
-  * [#1](https://github.com/mcflugen/py-richdem/issues/1)
-* Moved static metadata from *setup.py* into *pyproject.toml*.
-  * [#3](https://github.com/mcflugen/py-richdem/issues/3)
-* Vendored upstream *richdem* as a submodule of *py-richdem*.
-  * [#4](https://github.com/mcflugen/py-richdem/issues/4),
-    [#14](https://github.com/mcflugen/py-richdem/issues/14)
-* Cleaned up the versioning of *py-richdem* and *richdem*.
-  * [#5](https://github.com/mcflugen/py-richdem/issues/5)
-* Updated the README to reflect what *py-richdem* is,
-  and to give credit to [@r-barnes](https://github.com/r-barnes)
-  and the upstream repository.
-  * [#10](https://github.com/mcflugen/py-richdem/issues/10)
-* Switched public functions from camel-case to the more standard
-  snake-case.
+  * [#28](https://github.com/mcflugen/py-richdem/issues/28)
+
+### Changed
+
+* Public functions renamed from camelCase to snake_case to follow
+  standard Python conventions.
+
   * [#12](https://github.com/mcflugen/py-richdem/issues/12),
     [#18](https://github.com/mcflugen/py-richdem/issues/18)
-* Reorganized the *py-richdem* package:
-  moved api functions from ``__init__.py`` into ``_api.py``,
-  moved *gdal*-requiring functions into ``_gdal.py``,
-  moved *_richdem.py* extension module inside the *richdem* package.
-  * [#13](https://github.com/mcflugen/py-richdem/issues/13),
+
+* Reorganized the package structure:
+
+  * moved API functions from `__init__.py` to `_api.py`
+  * moved GDAL-dependent functions into `_gdal.py`
+  * moved the `_richdem` extension module inside the `richdem` package
+
+  - [#13](https://github.com/mcflugen/py-richdem/issues/13),
     [#16](https://github.com/mcflugen/py-richdem/issues/16),
     [#19](https://github.com/mcflugen/py-richdem/issues/19)
-* Use ``isinstance`` and raise ``TypeError`` when type checking.
+
+* Type checks now use `isinstance` and raise `TypeError`.
+
   * [#17](https://github.com/mcflugen/py-richdem/issues/17)
+
+* Moved the *py-richdem* version definition from `richdem._version`
+  into `pyproject.toml`.
+
+  * [#25](https://github.com/mcflugen/py-richdem/issues/25)
+
+### Build
+
+* Moved the package to a *src-layout*.
+
+  * [#1](https://github.com/mcflugen/py-richdem/issues/1)
+
+* Moved static metadata from *setup.py* into *pyproject.toml*.
+
+  * [#3](https://github.com/mcflugen/py-richdem/issues/3)
+
+* Vendored upstream *richdem* as a git submodule.
+
+  * [#4](https://github.com/mcflugen/py-richdem/issues/4),
+    [#14](https://github.com/mcflugen/py-richdem/issues/14)
+
+* Cleaned up version reporting for both *py-richdem* and the vendored
+  *richdem* library.
+
+  * [#5](https://github.com/mcflugen/py-richdem/issues/5)
+
+* Disabled the *richdem* progress bar during compilation by passing
+  `-DRICHDEM_NO_PROGRESS` to the CMake build.
+
+  * [#29](https://github.com/mcflugen/py-richdem/issues/29)
+
+### Developer
+
+* Added a `build-richdem` *nox* session to build the vendored *richdem* library.
+
+  * [#26](https://github.com/mcflugen/py-richdem/issues/26)
+
+* Added an `install` *nox* session that optionally builds the vendored
+  *richdem* library before installing *py-richdem*.
+
+  * [#27](https://github.com/mcflugen/py-richdem/issues/27)
+
+### Documentation
+
+* Updated the README to clarify the purpose of *py-richdem* and to give
+  attribution to [@r-barnes](https://github.com/r-barnes) and the upstream
+  repository.
+
+  * [#10](https://github.com/mcflugen/py-richdem/issues/10)
