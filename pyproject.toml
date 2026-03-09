@@ -10,6 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-richdem"
+version = "2.1.2"
 description = "Python interface to the RichDEM terrain analysis library."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
@@ -40,9 +41,6 @@ classifiers = [
 dependencies = [
   "numpy>=1.23",
 ]
-dynamic = [
-  "version",
-]
 
 [project.urls]
 Changelog = "https://github.com/mcflugen/py-richdem/blob/main/CHANGES.md"
@@ -63,9 +61,6 @@ rd_flow_accumulation = "richdem.cli:flow_accumulation"
 rd_terrain_attribute = "richdem.cli:terrain_attribute"
 rd_info = "richdem.cli:rd_info"
 rd_compare = "richdem.cli:rd_compare"
-
-[tool.setuptools.dynamic.version]
-attr = "richdem._version.__version__"
 
 [tool.setuptools.packages.find]
 where = ["src"]
