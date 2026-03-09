@@ -80,7 +80,8 @@ cd build
 cmake -S ../vendor/cmake \
   -DCMAKE_INSTALL_PREFIX=$RICHDEM_PREFIX \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_LIBDIR=lib
+  -DCMAKE_INSTALL_LIBDIR=lib \
+  -DRICHDEM_NO_PROGRESS=ON
 make
 make install
 """
@@ -106,7 +107,7 @@ DYLD_LIBRARY_PATH="$RICHDEM_PREFIX/lib:$OPENMP_PREFIX/lib:${LD_LIBRARY_PATH:-}" 
 archs = ["AMD64"]
 environment = "RICHDEM_PREFIX=%CD%/dist"
 before-build = [
-  "cmake -S vendor\\cmake -B build -DCMAKE_INSTALL_PREFIX=%RICHDEM_PREFIX% -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib",
+  "cmake -S vendor\\cmake -B build -DCMAKE_INSTALL_PREFIX=%RICHDEM_PREFIX% -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DRICHDEM_NO_PROGRESS=ON",
   "cmake --build build --config Release",
   "cmake --install build --config Release",
 ]

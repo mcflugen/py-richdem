@@ -35,6 +35,7 @@ def _build_richdem(session: nox.Session, inst_dir=None) -> str:
         "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DRICHDEM_NO_PROGRESS=ON",
         external=True,
     )
     session.run("cmake", "--build", build_dir, "--config", "Release", external=True)
