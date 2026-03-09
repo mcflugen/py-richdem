@@ -1,4 +1,5 @@
 import os
+import sys
 
 import nox
 
@@ -40,3 +41,33 @@ def _build_richdem(session: nox.Session, inst_dir=None) -> str:
     session.run("cmake", "--install", build_dir, "--config", "Release", external=True)
 
     return inst_dir
+
+
+@nox.session(python=None)
+def install(session: nox.Session) -> None:
+    _install_editable(
+        session,
+        richdem_prefix=os.environ.get("RICHDEM_PREFIX"),
+        openmp_prefix=os.environ.get("OPENMP_PREFIX"),
+    )
+
+
+def _install_editable(
+    session: nox.Session, richdem_prefix=None, openmp_prefix=None
+) -> None:
+    if richdem_prefix is None:
+        richdem_prefix = _build_richdem(session)
+
+    env = {"RICHDEM_PREFIX": richdem_prefix}
+    if openmp_prefix:
+        env["OPENMP_PREFIX"] = openmp_prefix
+
+    if sys.platform == "darwin" and not openmp_prefix:
+        session.warn("OPENMP_PREFIX is not set")
+
+    for k, v in env.items():
+        session.log(f"{k} = {v}")
+
+    session.run("python", "-m", "pip", "install", "-e", ".", env=env)
+
+    return richdem_prefix
