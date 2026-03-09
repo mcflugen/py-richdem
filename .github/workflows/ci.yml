@@ -131,7 +131,7 @@ jobs:
         run: echo "OPENMP_PREFIX=${CONDA_PREFIX}" >> "$GITHUB_ENV"
 
       - name: Build richdem
-        run: nox -s build-richdem
+        run: nox -s install
 
   publish:
     needs: "build-wheels"
