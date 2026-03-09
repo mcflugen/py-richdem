@@ -91,6 +91,48 @@ jobs:
           name: wheel-${{ matrix.os }}-${{ matrix.cibw-only }}
           path: ./wheelhouse/*.whl
 
+  build-vendor:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          pip-install: nox
+          cache: "pip"
+
+      - name: openmp for MacOS
+        uses: mamba-org/setup-micromamba@v2
+        if: runner.os == 'macOS'
+        with:
+          micromamba-version: "latest"
+          environment-name: richdem
+          create-args: >-
+            llvm-openmp
+          cache-environment: true
+
+      - name: Set OPENMP_PREFIX
+        if: runner.os == 'macOS'
+        shell: bash -l {0}
+        run: echo "OPENMP_PREFIX=${CONDA_PREFIX}" >> "$GITHUB_ENV"
+
+      - name: Build richdem
+        run: nox -s build-richdem
+
   publish:
     needs: "build-wheels"
     name: "Publish to PyPI/TestPyPI"
