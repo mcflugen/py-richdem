@@ -36,6 +36,7 @@ if(APPLE AND DEFINED ENV{OPENMP_PREFIX})
 endif()
 
 find_package(OpenMP REQUIRED)
+set(RICHDEM_OPENMP_ENABLED ${OpenMP_FOUND})
 
 # ---
 # richdem version info from git
@@ -72,12 +73,12 @@ message(STATUS "RICHDEM_GIT_TAG  = ${RICHDEM_GIT_TAG}")
 message(STATUS "RICHDEM_GIT_DESC = ${RICHDEM_GIT_DESC}")
 
 set(GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
-set(GENERATED_HDR "${GENERATED_INCLUDE_DIR}/richdem/common/richdem_version.hpp")
+set(GENERATED_HDR "${GENERATED_INCLUDE_DIR}/richdem/build_config.hpp")
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/richdem/common")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/richdem")
 
 configure_file(
-  "${CMAKE_CURRENT_LIST_DIR}/richdem_version.hpp.in"
+  "${CMAKE_CURRENT_LIST_DIR}/build_config.hpp.in"
   "${GENERATED_HDR}"
   @ONLY
 )

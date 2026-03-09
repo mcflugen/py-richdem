@@ -1,5 +1,5 @@
 #include <pybind11/pybind11.h>
-#include <richdem/common/richdem_version.hpp>
+#include <richdem/build_config.hpp>
 #include <richdem/depressions/depressions.hpp>
 #include <richdem/methods/terrain_attributes.hpp>
 #include <richdem/methods/flow_accumulation.hpp>
@@ -179,6 +179,7 @@ PYBIND11_MODULE(_richdem, m) {
   m.attr("git_hash") = RICHDEM_GIT_HASH;
   m.attr("git_desc") = RICHDEM_GIT_DESC;
   m.attr("compilation_datetime") = RICHDEM_COMPILE_TIME;
+  m.attr("build_string") = RICHDEM_BUILD_STRING;
 
   //py::bind_vector<std::vector<double>>(m, "VecDouble");
   py::bind_map<std::map<std::string, std::string>>(m, "MapStringString");

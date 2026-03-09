@@ -12,6 +12,7 @@ except ImportError as e:
     raise e
 
 richdem_version = _richdem.git_desc.removeprefix("v")
+richdem_build_string = _richdem.build_string
 
 
 def _format_richdem_version():

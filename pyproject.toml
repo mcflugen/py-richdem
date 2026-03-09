@@ -85,7 +85,7 @@ make
 make install
 """
 test-command = """
-python -c "import richdem; print(f'pyrichdem={richdem.__version__}, richdem={richdem.richdem_version}')"
+python -c "import richdem; print(f'pyrichdem={richdem.__version__}, richdem={richdem.richdem_build_string}')"
 """
 
 [tool.cibuildwheel.linux]
