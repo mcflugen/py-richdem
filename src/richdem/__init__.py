@@ -9,6 +9,7 @@ from richdem._api import rd3array
 from richdem._api import rd_show
 from richdem._api import rdarray
 from richdem._api import resolve_flats
+from richdem._api import richdem_build_string
 from richdem._api import richdem_version
 from richdem._api import terrain_attribute
 from richdem._gdal import load_gdal
@@ -39,6 +40,7 @@ __all__ = (
     "fill_depressions",
     "breach_depressions",
     "resolve_flats",
+    "richdem_build_string",
     "richdem_version",
     "flow_accumulation",
     "flow_accum_from_props",
