@@ -25,6 +25,10 @@ jobs:
 
     name: Build wheels on ${{ matrix.cibw-only }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -90,6 +94,12 @@ jobs:
         uses: pypa/cibuildwheel@v4.2.0
         with:
           only: ${{ matrix.cibw-only }}
+
+      - name: Attest wheel build provenance
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_to != ''
+        uses: actions/attest@v4.2.2
+        with:
+          subject-path: ./wheelhouse/*.whl
 
       - name: Upload wheels
         uses: actions/upload-artifact@v6
