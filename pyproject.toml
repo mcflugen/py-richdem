@@ -37,6 +37,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
   "numpy>=1.23",
@@ -67,7 +68,7 @@ where = ["src"]
 include = ["richdem*"]
 
 [tool.cibuildwheel]
-build = ["cp311-*", "cp312-*", "cp313-*", "cp314-*"]
+build = ["cp311-*", "cp312-*", "cp313-*", "cp314-*", "cp315-*"]
 skip = ["*-win32", "*-manylinux_i686*", "*-musllinux_i686*"]
 environment-pass = ["OPENMP_PREFIX"]
 environment = """
@@ -87,6 +88,7 @@ make install
 """
 test-command = """
 python -c "import richdem; print(f'pyrichdem={richdem.__version__}, richdem={richdem.richdem_build_string}')"
+python -c "import numpy as np; import richdem as rd; dem = rd.rdarray(np.array([[5, 5, 5], [5, 0, 5], [5, 5, 5]], dtype=np.float64), no_data=-9999); filled = rd.fill_depressions(dem); assert np.all(filled == 5)"
 """
 
 [tool.cibuildwheel.linux]
